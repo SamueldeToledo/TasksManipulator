@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Eventing.Reader;
 using TasksManipulator.Application.DTO;
 using TasksManipulator.Application.Interfaces;
 using TasksManipulator.Application.Services;
@@ -60,5 +61,19 @@ namespace TasksManipulator.Controllers
             return Ok(entity);
         }
 
+        [HttpPut]
+
+        public ActionResult<TasksDTO> Put(TasksDTO entity)
+        {
+            var DTO = _mapper.Map<Tasks>(entity);
+
+            var DTOUpdate = _Service.Put(DTO);
+
+            if (DTOUpdate.IdTask == 0)
+                return BadRequest("Tarefa não atualizada");
+
+            return Ok(DTOUpdate);
+
+        }
     }
 }

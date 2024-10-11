@@ -11,7 +11,7 @@ namespace TasksManipulator.Domain.Interfaces
     {
         public IEnumerable<Tasks> GetAll();
         public Tasks Get(int id);
-        public Tasks Put(Tasks entity, int id);
+        public Tasks Put(Tasks entity);
         public Tasks post( Tasks entity);
         public Tasks Delete(int id);
     }

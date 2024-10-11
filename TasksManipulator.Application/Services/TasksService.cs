@@ -67,8 +67,9 @@ namespace TasksManipulator.Application.Services
             return entity;
         }
 
-        public Tasks Put(Tasks entity, int id)
+        public Tasks Put(Tasks entity)
         {
+            var task = new Tasks();
             if (!Directory.Exists(_Manipulator.Path))
             {
                 Directory.CreateDirectory(_Manipulator.Path);
@@ -78,9 +79,10 @@ namespace TasksManipulator.Application.Services
             else if (!File.Exists(_Manipulator.File))
                 File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed\n");
 
-            //gerar método de Put
+            else
+                task = _Repository.Put(entity);
 
-            return entity;
+            return task;
         }
         public Tasks Delete(int id)
         {

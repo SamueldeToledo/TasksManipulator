@@ -92,10 +92,10 @@ namespace TasksManipulator.Infraestructure.Repositories
             return entity;
         }
 
-        public Tasks Put(Tasks entity, int id)
+        public Tasks Put(Tasks entity)
         {
             var arquivo = File.ReadAllLines(_fileManipulator.File).ToList();
-
+            var task = new Tasks();
             foreach (var item in arquivo)
             {
                 var listaDeTarefas = item.Split(';');
@@ -110,13 +110,38 @@ namespace TasksManipulator.Infraestructure.Repositories
                 ListadeStrings[5] = entity.completed.ToString();
 
                 int indice = listaDeTarefas.Select((linha, index) => new { linha, index })
-                   .FirstOrDefault(x => x.linha == id.ToString())?.index ?? -1;
+                   .FirstOrDefault(x => x.linha == entity.IdTask.ToString())?.index ?? -1;
 
                 listaDeTarefas[indice] = ListadeStrings.FirstOrDefault().ToString();
             }
 
             File.WriteAllLines(_fileManipulator.File, arquivo);
-            return entity;
+
+            //roda a lista de novo e mostra a nova linha que foi inserida
+            var arquivoUpdate = File.ReadAllLines(_fileManipulator.File).ToList();
+
+            foreach (var item in arquivoUpdate)
+            {
+                var listaDeTarefas = item.Split(';');
+                listaDeTarefas.Where(l => l[0].ToString() == entity.IdTask.ToString());
+
+                task = new Tasks
+                {
+                    IdTask = Convert.ToInt32(listaDeTarefas[0])
+                    ,
+                    TaskName = listaDeTarefas[1]
+                    ,
+                    ToDo = listaDeTarefas[2]
+                    ,
+                    CreationDate = Convert.ToDateTime(listaDeTarefas[3])
+                    ,
+                    DeliveryDate = Convert.ToDateTime(listaDeTarefas[4])
+                    ,
+                    completed = Convert.ToBoolean(listaDeTarefas[5])
+
+                };
+            }
+            return task;
         }
         public Tasks Delete(int id)
         {
