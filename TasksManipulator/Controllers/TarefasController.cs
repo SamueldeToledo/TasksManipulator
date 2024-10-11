@@ -26,12 +26,23 @@ namespace TasksManipulator.Controllers
         public ActionResult<TasksDTO> GetbyId(int id)
         {
             var DTO = _Service.Get(id);
+
+            if (DTO.IdTask == 0)
+            {
+                return BadRequest("Tarefa não encontrada");
+            }
+
             return Ok(_mapper.Map<TasksDTO>(DTO));
         }
         [HttpGet]
         public ActionResult<IEnumerable<TasksDTO>> Get()
         {
             var DTO = _Service.GetAll();
+
+            if (DTO.Count() == 0)
+            {
+                return BadRequest("Não há tarefas para serem consultadas");
+            }
             return Ok(_mapper.Map<IEnumerable<TasksDTO>>(DTO));
         }
 
@@ -49,12 +60,5 @@ namespace TasksManipulator.Controllers
             return Ok(entity);
         }
 
-        //[HttpDelete]
-        //public ActionResult Delete(int id) 
-        //{
-        
-        //    _Service.Delete(id);
-        
-        //}
     }
 }

@@ -25,7 +25,8 @@ namespace TasksManipulator.Infraestructure.Repositories
             var task = new Tasks();
 
             var arquivo = File.ReadAllLines(_fileManipulator.File);
-            foreach (var item in arquivo)
+            var PulaTitulo = arquivo.Skip(1);
+            foreach (var item in PulaTitulo)
             {
                 var listaDeTarefas = item.Split(';');
                 listaDeTarefas.Where(l => l[0].ToString() == id.ToString());
@@ -54,7 +55,9 @@ namespace TasksManipulator.Infraestructure.Repositories
         {
             var task = new List<Tasks>();
             var arquivo = File.ReadAllLines(_fileManipulator.File);
-            foreach (var item in arquivo)
+
+            var PulaTitulo = arquivo.Skip(1);
+            foreach (var item in PulaTitulo)
             {
                 var listaDeTarefas = item.Split(';');
 
@@ -83,7 +86,7 @@ namespace TasksManipulator.Infraestructure.Repositories
         {
             using (StreamWriter writer = new StreamWriter(_fileManipulator.File, true))
             {
-                writer.WriteLine(entity.IdTask.ToString()+ ";" + entity.TaskName + ";" + entity.ToDo + ";" + entity.CreationDate.ToString() + ";" + entity.DeliveryDate.ToString() + ";" + entity.completed.ToString());
+                writer.WriteLine(entity.IdTask.ToString() + ";" + entity.TaskName + ";" + entity.ToDo + ";" + entity.CreationDate.ToString() + ";" + entity.DeliveryDate.ToString() + ";" + entity.completed.ToString());
             }
 
             return entity;
@@ -96,7 +99,7 @@ namespace TasksManipulator.Infraestructure.Repositories
             foreach (var item in arquivo)
             {
                 var listaDeTarefas = item.Split(';');
-                
+
                 string[] ListadeStrings = new string[6];
 
                 ListadeStrings[0] = entity.IdTask.ToString();

@@ -25,36 +25,62 @@ namespace TasksManipulator.Application.Services
 
         public Tasks Get(int id)
         {
-            if (!File.Exists(_Manipulator.File))
-            { 
-                File.Create(_Manipulator.File);
-                File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed");
+            if (!Directory.Exists(_Manipulator.Path))
+            {
+                Directory.CreateDirectory(_Manipulator.Path);
+                File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed\n");
             }
-            
 
-            return  _Repository.Get(id);    
+            else if (!File.Exists(_Manipulator.File))
+                File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed\n");
+
+            return _Repository.Get(id);
         }
 
         public IEnumerable<Tasks> GetAll()
         {
-           return  _Repository.GetAll();
+            if (!Directory.Exists(_Manipulator.Path))
+            {
+                Directory.CreateDirectory(_Manipulator.Path);
+                File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed\n");
+            }
+
+            else if (!File.Exists(_Manipulator.File))
+                File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed\n");
+
+            return _Repository.GetAll();
         }
 
         public Tasks post(Tasks entity)
         {
-            if (!File.Exists(_Manipulator.File))
+            if (!Directory.Exists(_Manipulator.Path))
             {
-                File.Create(_Manipulator.File);
-                File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed");
+                Directory.CreateDirectory(_Manipulator.Path);
+                File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed\n");
             }
-            _Repository.post(entity);
+
+            else if (!File.Exists(_Manipulator.File))
+                File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed\n");
+
+                _Repository.post(entity);
 
             return entity;
         }
 
         public Tasks Put(Tasks entity, int id)
         {
-            throw new NotImplementedException();
+            if (!Directory.Exists(_Manipulator.Path))
+            {
+                Directory.CreateDirectory(_Manipulator.Path);
+                File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed\n");
+            }
+
+            else if (!File.Exists(_Manipulator.File))
+                File.WriteAllText(_Manipulator.File, "IdTask;TaskName;ToDo;CreationDate;DeliveryDate;completed\n");
+
+            //gerar método de Put
+
+            return entity;
         }
         public Tasks Delete(int id)
         {
