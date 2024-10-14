@@ -86,7 +86,14 @@ namespace TasksManipulator.Application.Services
         }
         public Tasks Delete(int id)
         {
-            throw new NotImplementedException();
+            if (id == 0 )
+            {
+                var vazio = new Tasks();
+                return vazio = null;
+            }
+
+            var task = _Repository.Delete(id);
+            return task;
         }
 
     }

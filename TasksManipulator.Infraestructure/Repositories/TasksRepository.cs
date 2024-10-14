@@ -96,31 +96,29 @@ namespace TasksManipulator.Infraestructure.Repositories
         {
             var arquivo = File.ReadAllLines(_fileManipulator.File).ToList();
             var task = new Tasks();
-            foreach (var item in arquivo)
+
+            for (int i = 0; i < arquivo.Count(); i++)
             {
-                var listaDeTarefas = item.Split(';');
+                var listaDeTarefas = arquivo[i].Split(";");
+                if (listaDeTarefas[0] == entity.IdTask.ToString())
+                {
+                    listaDeTarefas[0] = entity.IdTask.ToString();
+                    listaDeTarefas[1] = entity.TaskName.ToString();
+                    listaDeTarefas[2] = entity.ToDo.ToString();
+                    listaDeTarefas[3] = DateTime.Now.ToString();
+                    listaDeTarefas[4] = entity.DeliveryDate.ToString();
+                    listaDeTarefas[5] = entity.completed.ToString();
 
-                string[] ListadeStrings = new string[6];
-
-                ListadeStrings[0] = entity.IdTask.ToString();
-                ListadeStrings[1] = entity.TaskName.ToString();
-                ListadeStrings[2] = entity.ToDo.ToString();
-                ListadeStrings[3] = DateTime.Now.ToString();
-                ListadeStrings[4] = entity.DeliveryDate.ToString();
-                ListadeStrings[5] = entity.completed.ToString();
-
-                int indice = listaDeTarefas.Select((linha, index) => new { linha, index })
-                   .FirstOrDefault(x => x.linha == entity.IdTask.ToString())?.index ?? -1;
-
-                listaDeTarefas[indice] = ListadeStrings.FirstOrDefault().ToString();
+                    arquivo[i] = string.Join(";", listaDeTarefas);
+                }
             }
 
             File.WriteAllLines(_fileManipulator.File, arquivo);
 
             //roda a lista de novo e mostra a nova linha que foi inserida
             var arquivoUpdate = File.ReadAllLines(_fileManipulator.File).ToList();
-
-            foreach (var item in arquivoUpdate)
+            var Lista = arquivoUpdate.Skip(1);
+            foreach (var item in Lista)
             {
                 var listaDeTarefas = item.Split(';');
                 listaDeTarefas.Where(l => l[0].ToString() == entity.IdTask.ToString());
@@ -148,44 +146,37 @@ namespace TasksManipulator.Infraestructure.Repositories
             var arquivo = File.ReadAllLines(_fileManipulator.File).ToList();
             var task = new Tasks();
 
-            //popula a entidade para mostrar no grid
-            foreach (var item in arquivo)
+            for (int i = 0; i < arquivo.Count(); i++)
             {
-                var listaDeTarefas = item.Split(';');
-                listaDeTarefas.Where(l => l[0].ToString() == id.ToString());
+                var listaDeTarefas = arquivo[i].Split(";");
 
-                task = new Tasks
+                if (listaDeTarefas[0] == id.ToString())
                 {
-                    IdTask = Convert.ToInt32(listaDeTarefas[0])
+                    task = new Tasks
+                    {
+                        IdTask = Convert.ToInt32(listaDeTarefas[0])
                     ,
-                    TaskName = listaDeTarefas[1]
+                        TaskName = listaDeTarefas[1]
                     ,
-                    ToDo = listaDeTarefas[2]
+                        ToDo = listaDeTarefas[2]
                     ,
-                    CreationDate = Convert.ToDateTime(listaDeTarefas[3])
+                        CreationDate = Convert.ToDateTime(listaDeTarefas[3])
                     ,
-                    DeliveryDate = Convert.ToDateTime(listaDeTarefas[4])
+                        DeliveryDate = Convert.ToDateTime(listaDeTarefas[4])
                     ,
-                    completed = Convert.ToBoolean(listaDeTarefas[5])
+                        completed = Convert.ToBoolean(listaDeTarefas[5])
 
-                };
-            }
+                    };
 
-            //remove ela do arquivo
-            foreach (var item in arquivo)
-            {
-                var listaDeTarefas = item.Split(';');
-
-
-                int indice = listaDeTarefas.Select((linha, index) => new { linha, index })
-                   .FirstOrDefault(x => x.linha == id.ToString())?.index ?? -1;
-
-                arquivo.RemoveAt(indice);
+                    arquivo.RemoveAt(i);
+                }
             }
 
             File.WriteAllLines(_fileManipulator.File, arquivo);
-            return task;
-        }
 
+
+            return task;
+
+        }
     }
 }

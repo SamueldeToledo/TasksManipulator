@@ -75,5 +75,18 @@ namespace TasksManipulator.Controllers
             return Ok(DTOUpdate);
 
         }
+
+        [HttpDelete]
+        public ActionResult<TasksDTO> Delete(int id) 
+        {
+
+            var result = _Service.Delete(id);
+            if (result is null)
+            {
+                return BadRequest("O id inserido não existe");
+            }
+
+            return Ok(_mapper.Map<TasksDTO>(result));
+        }
     }
 }
